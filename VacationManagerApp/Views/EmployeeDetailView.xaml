@@ -1,0 +1,66 @@
+<Window x:Class="VacationManagerApp.Views.EmployeeDetailView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Employee Details" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Display Employee's Name and Remaining Vacation Days -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="10">
+            <TextBlock Text="Employee:" FontWeight="Bold" Margin="0,0,10,0" />
+            <TextBlock Text="{Binding Employee.FirstName}" />
+            <TextBlock Text=" " />
+            <TextBlock Text="{Binding Employee.LastName}" />
+            <TextBlock Text="  Remaining Days: " FontWeight="Bold" Margin="20,0,0,0" />
+            <TextBlock Text="{Binding Employee.RemainingVacationDays}" />
+            <TextBlock Text="  Used Days: " FontWeight="Bold" Margin="20, 0, 0, 0" />
+            <TextBlock Text="{Binding VacationDaysUsed}" />
+        </StackPanel>
+
+        <!-- DataGrid for displaying vacation history -->
+        <DataGrid ItemsSource="{Binding Vacations}" AutoGenerateColumns="False" Grid.Row="1" IsReadOnly="True" Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Start Date" Binding="{Binding StartDate, StringFormat=\{0:MM/dd/yyyy\}}" Width="*" />
+                <DataGridTextColumn Header="End Date" Binding="{Binding EndDate, StringFormat=\{0:MM/dd/yyyy\}}" Width="*" />
+                <DataGridTextColumn Header="Duration (Days)" Binding="{Binding Duration}" Width="*" />
+
+                <!-- Edit Icon Column -->
+                <DataGridTemplateColumn Header="Edit" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.EditVacationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}" 
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <materialDesign:PackIcon Kind="Pencil" Width="24" Height="24" Foreground="DodgerBlue" HorizontalAlignment="Center" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <!-- Delete Icon Column -->
+                <DataGridTemplateColumn Header="Delete" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.DeleteVacationCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    CommandParameter="{Binding}" 
+                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <materialDesign:PackIcon Kind="Delete" Width="24" Height="24" Foreground="Red" HorizontalAlignment="Center" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

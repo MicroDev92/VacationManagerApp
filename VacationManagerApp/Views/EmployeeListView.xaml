@@ -1,0 +1,35 @@
+﻿<Window x:Class="VacationManagerApp.Views.EmployeeListView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource MaterialDesignWindow}"
+        mc:Ignorable="d"
+        Title="EmployeeListView" Height="450" Width="800"
+        DataContext="{Binding EmployeeListViewModel, Source={StaticResource Locator}}">
+        <Grid Margin="16">
+                <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Employee List DataGrid in a Material Design Card -->
+                <DataGrid ItemsSource="{Binding Employees}" AutoGenerateColumns="False"
+                          SelectedItem="{Binding SelectedEmployee}" IsReadOnly="True" Margin="0"
+                          MouseDoubleClick="Column_MouseDoubleClick"
+                          RowHeaderWidth="0" CanUserAddRows="False" HeadersVisibility="Column">
+                        <DataGrid.Columns>
+                                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" Width="*" />
+                                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" Width="*" />
+                                <DataGridTextColumn Header="Remaining Days" Binding="{Binding RemainingVacationDays}" Width="*" />
+                        </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- Add Vacation Button styled with Material Design -->
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Add Vacation" Command="{Binding OpenAddVacationCommand}" Margin="10"
+                                Width="120" />
+                </StackPanel>
+        </Grid>
+</Window>
