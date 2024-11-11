@@ -106,6 +106,10 @@ public class AddVacationViewModel : BaseViewModel
             ValidationMessage = "The start date cannot be after the end date.";
         else if (!HasSufficientVacationDays())
             ValidationMessage = "The vacation duration exceeds the employee's remaining vacation days.";
+        else if (StartDate.Date == EndDate.Date && (StartDate.DayOfWeek == DayOfWeek.Saturday || StartDate.DayOfWeek == DayOfWeek.Sunday))
+        {
+            ValidationMessage = "Cannot set the date to a weekend.";
+        }
         else if (VacationDatesExist())
             ValidationMessage = "Vacation with supplied dates already exist.";
         else
@@ -119,13 +123,13 @@ public class AddVacationViewModel : BaseViewModel
         var newDuration = CalculateVacationDuration();
         return newDuration <= SelectedEmployee.RemainingVacationDays;
     }
-
+    
     private int CalculateVacationDuration()
     {
         var duration = 0;
-        var current = StartDate;
+        var current = StartDate.Date;
 
-        while (current <= EndDate)
+        while (current <= EndDate.Date)
         {
             if (current.DayOfWeek != DayOfWeek.Saturday && current.DayOfWeek != DayOfWeek.Sunday) duration++;
             current = current.AddDays(1);

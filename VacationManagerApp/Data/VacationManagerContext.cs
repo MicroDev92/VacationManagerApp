@@ -20,7 +20,7 @@ public class VacationManagerContext : DbContext
             new Employee
                 { Id = 2, FirstName = "Jane", LastName = "Doe", TotalVacationDays = 30, RemainingVacationDays = 30 },
             new Employee
-                { Id = 2, FirstName = "Anthony", LastName = "Hopkins", TotalVacationDays = 20, RemainingVacationDays = 20 }
+                { Id = 3, FirstName = "Anthony", LastName = "Hopkins", TotalVacationDays = 20, RemainingVacationDays = 20 }
         );
 
         modelBuilder.Entity<Vacation>()
