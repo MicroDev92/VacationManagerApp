@@ -100,19 +100,36 @@ public class EditVacationViewModel : BaseViewModel
     {
         if (StartDate > EndDate)
             ValidationMessage = "The start date cannot be after the end date.";
-        else if (!HasSufficientVacationDays())
-            ValidationMessage = "The edited vacation duration exceeds available vacation days.";
+        else if (StartDate.DayOfWeek == DayOfWeek.Saturday && EndDate.DayOfWeek == DayOfWeek.Sunday && (EndDate - StartDate).Days == 1)
+            ValidationMessage = "Cannot set a vacation that spans only weekend days.";
+        else if ((StartDate.Date == EndDate.Date && StartDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday))
+            ValidationMessage = "Cannot set the date to a weekend.";
+        else if (!HasSufficientVacationDays(out var validationMessage))
+            ValidationMessage = validationMessage;
         else
             ValidationMessage = string.Empty;
     }
 
-    private bool HasSufficientVacationDays()
+    private bool HasSufficientVacationDays(out string validationMessage)
     {
+        if (Employee.RemainingVacationDays == 0)
+        {
+            validationMessage = "Employee has no vacation days left.";
+            return false;
+        }
+        
         var newDuration = CalculateVacationDuration();
         var usedVacationDays = Employee.TotalVacationDays - Employee.RemainingVacationDays;
         var totalVacationAfterEdit = usedVacationDays - Vacation.Duration + newDuration;
 
-        return totalVacationAfterEdit <= Employee.TotalVacationDays;
+        if (totalVacationAfterEdit <= Employee.TotalVacationDays)
+        {
+            validationMessage = string.Empty;
+            return true;
+        }
+
+        validationMessage = "The edited vacation duration exceeds available vacation days.";
+        return false;
     }
 
     private int CalculateVacationDuration()

@@ -104,24 +104,36 @@ public class AddVacationViewModel : BaseViewModel
     {
         if (StartDate.Date > EndDate.Date)
             ValidationMessage = "The start date cannot be after the end date.";
-        else if (!HasSufficientVacationDays())
-            ValidationMessage = "The vacation duration exceeds the employee's remaining vacation days.";
-        else if (StartDate.Date == EndDate.Date && (StartDate.DayOfWeek == DayOfWeek.Saturday || StartDate.DayOfWeek == DayOfWeek.Sunday))
-        {
+        else if (!HasSufficientVacationDays(out var validationMessage))
+            ValidationMessage = validationMessage;
+        else if (StartDate.DayOfWeek == DayOfWeek.Saturday && EndDate.DayOfWeek == DayOfWeek.Sunday && (EndDate - StartDate).Days == 1)
+            ValidationMessage = "Cannot set a vacation that spans only weekend days.";
+        else if ((StartDate.Date == EndDate.Date && StartDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday))
             ValidationMessage = "Cannot set the date to a weekend.";
-        }
         else if (VacationDatesExist())
             ValidationMessage = "Vacation with supplied dates already exist.";
         else
             ValidationMessage = string.Empty;
     }
 
-    private bool HasSufficientVacationDays()
+    private bool HasSufficientVacationDays(out string validationMessage)
     {
+        validationMessage = string.Empty;
+        
         if (SelectedEmployee == null) return true;
 
+        if (SelectedEmployee.RemainingVacationDays == 0)
+        {
+            validationMessage = "Employee has no vacation days left.";
+            return false;
+        }
+
         var newDuration = CalculateVacationDuration();
-        return newDuration <= SelectedEmployee.RemainingVacationDays;
+
+        if (newDuration <= SelectedEmployee.RemainingVacationDays) return true;
+
+        validationMessage = "The vacation duration exceeds the employee's remaining vacation days.";
+        return false;
     }
     
     private int CalculateVacationDuration()
