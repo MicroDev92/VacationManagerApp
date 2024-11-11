@@ -11,7 +11,7 @@ A WPF desktop application for managing employee vacation days, allowing HR or ma
 - Uses SQLite for persistent, local storage.
 - Uses MVVM pattern.
 - Uses ICommands in conjunction with **Custom** RelayCommand implementation.
-- Main View (EmployeeListView) is injected using DI into the View.
+- ``EmployeeListViewModel`` is injected via dependency injection (DI) for the Main View, as it requires a consistent, DI-managed database context, unlike other ViewModels that depend on user-selected data.
 
 ## Libraries and Dependencies
 
