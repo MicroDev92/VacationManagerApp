@@ -9,14 +9,15 @@ A WPF desktop application for managing employee vacation days, allowing HR or ma
 - Schedule, edit, and delete vacation days.
 - Integrated validations to prevent exceeding allotted vacation days.
 - Uses SQLite for persistent, local storage.
-- Use ICommand in conjunction with **Custom** RelayCommand implementation.
+- Uses MVVM pattern.
+- Uses ICommands in conjunction with **Custom** RelayCommand implementation.
 - Main View (EmployeeListView) is injected using DI into the View.
 
 ## Libraries and Dependencies
 
 The application relies on the following libraries:
 
-- **MaterialDesignInXAML**: For a clean UI/UX experience.
+- **MaterialDesignInXAML**: For a clean UI experience.
 - **Entity Framework Core (EF Core)**: For SQLite database access and ORM capabilities.
 - **SQLite**: For persistent storage.
 - **Microsoft.Extensions.DependencyInjection & Hosting**: For DI setup and application lifecycle management.
@@ -29,4 +30,6 @@ The application relies on the following libraries:
 - Initial seed contains no Vacations
 
 ## Additional Notes
+- Built with JetBrains Rider 2024
+- This project is built on .NET 6, which is not natively supported by Visual Studio 2019. To run and develop this application, you’ll need Visual Studio 2022 or a compatible IDE such as JetBrains Rider. Visual Studio 2019 only supports up to .NET 5, so attempting to load or build this project in Visual Studio 2019 may lead to compatibility issues.
 - I have taken the liberty of modifying the UI a little, Windows do not look exactly the same as in the Task Description. Hope that's okay! :)
